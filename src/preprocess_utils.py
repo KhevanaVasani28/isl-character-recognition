@@ -14,39 +14,8 @@ hands = mp.solutions.hands.Hands(
     min_tracking_confidence=0.5,
 )
 
-#%% ==================================================
-# LETTERBOXING BECAUSE OF ASPECT RATIO ISSUES (for video dynamic dataset)
-# ====================================================
-def preprocess_frame(frame_bgr, target_size=TARGET_SIZE):
-    """
-    Letterbox frame to square (preserves aspect ratio),
-    then resize. Returns RGB image.
-    """
-    h, w = frame_bgr.shape[:2]
-    target_w, target_h = target_size
-
-    # Scale to fit while preserving aspect ratio
-    scale = min(target_w / w, target_h / h)
-    new_w = int(round(w * scale))
-    new_h = int(round(h * scale))
-
-    # resized 
-    resized = cv2.resize(frame_bgr, (new_w, new_h), interpolation=cv2.INTER_AREA)
-
-    # Black square canvas
-    canvas = np.zeros((target_h, target_w, 3), dtype=np.uint8)
-
-    # Center paste
-    x_offset = (target_w - new_w) // 2
-    y_offset = (target_h - new_h) // 2
-    canvas[y_offset:y_offset + new_h, x_offset:x_offset + new_w] = resized
-
-    # BGR -> RGB
-    return cv2.cvtColor(canvas, cv2.COLOR_BGR2RGB)
-
-
 # %% ==========================================================
-# STEP 3 : Function to Process Hands with Proper Ordering
+# STEP 1 : Function to Process Hands with Proper Ordering
 # ==========================================================
 def process_hands_correctly(multi_hand_landmarks, multi_handedness):
     """
@@ -70,7 +39,7 @@ def process_hands_correctly(multi_hand_landmarks, multi_handedness):
     return left_hand, right_hand
 
 # %% ==========================================================
-# STEP 4 : Feature Extraction for Each Hand
+# STEP 2 : Feature Extraction for Each Hand
 # ==========================================================
 
 def extract_hand_features(hand_landmarks, hand_type):
@@ -104,7 +73,7 @@ def extract_hand_features(hand_landmarks, hand_type):
     return features
 
 # %% =======================================================
-# STEP 5 : Hand ordering 
+# STEP 3 : Hand ordering 
 # ==========================================================
 # from static_utils
 
