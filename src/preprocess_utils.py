@@ -41,7 +41,6 @@ def process_hands_correctly(multi_hand_landmarks, multi_handedness):
 # %% ==========================================================
 # STEP 2 : Feature Extraction for Each Hand
 # ==========================================================
-
 def extract_hand_features(hand_landmarks, hand_type):
     """
     Extract features for a single hand.
@@ -75,8 +74,6 @@ def extract_hand_features(hand_landmarks, hand_type):
 # %% =======================================================
 # STEP 3 : Hand ordering 
 # ==========================================================
-# from static_utils
-
 def extract_features_from_rgb(frame_rgb):
     """Returns 128-dim vector for one frame."""
     results = hands.process(frame_rgb)
