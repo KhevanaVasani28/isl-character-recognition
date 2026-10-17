@@ -10,6 +10,7 @@ import time
 from collections import deque
 
 from config import *
+from preprocess_utils import process_hands_correctly, extract_hand_features
 
 # %% ==========================================================
 # STEP 2 : Load Model and Label Encoder
@@ -54,56 +55,9 @@ mp_draw = mp.solutions.drawing_utils
 
 print("MediaPipe initialized successfully.")
 
-# %% ==========================================================
+# %% =======================================================
 # STEP 5 : Landmark Extraction Function
 # ==========================================================
-
-def process_hands_correctly(multi_hand_landmarks, multi_handedness):
-    """Identify which hand is left and which is right."""
-    left_hand = None
-    right_hand = None
-    
-    if multi_hand_landmarks is None:
-        return left_hand, right_hand
-    
-    for idx, hand_landmarks in enumerate(multi_hand_landmarks):
-        handedness = multi_handedness[idx].classification[0].label
-        if handedness == 'Left':
-            left_hand = hand_landmarks
-        else:  # 'Right'
-            right_hand = hand_landmarks
-    
-    return left_hand, right_hand
-
-def extract_hand_features(hand_landmarks, hand_type):
-    """
-    Extract features for a single hand.
-    hand_type: 0 for left, 1 for right
-    Returns: list of features [hand_type, x1, y1, z1, x2, y2, z2, ...]
-    """
-    features = [hand_type]  # 0 for left, 1 for right
-    
-    if hand_landmarks is None:
-        # Extend with 63 zeros (21 landmarks * 3)
-        features.extend([0.0] * 63)
-        return features
-    
-    # Wrist is landmark 0
-    wrist = hand_landmarks.landmark[0]
-    wrist_x = wrist.x
-    wrist_y = wrist.y
-    wrist_z = wrist.z
-    
-    # Normalize all landmarks relative to wrist
-    for landmark in hand_landmarks.landmark:
-        features.extend([
-            landmark.x - wrist_x,
-            landmark.y - wrist_y,
-            landmark.z - wrist_z
-        ])
-    
-    return features
-
 def extract_landmark_features(results):
     """
     Extract normalized hand landmarks from MediaPipe results.
