@@ -119,7 +119,7 @@ param_distributions = {
 random_search = RandomizedSearchCV(
     estimator=RandomForestClassifier(random_state=42, n_jobs=2),
     param_distributions=param_distributions,
-    n_iter=8,               # only 10 combos
+    n_iter=8,               
     cv=3,
     scoring='accuracy',
     n_jobs=1,
