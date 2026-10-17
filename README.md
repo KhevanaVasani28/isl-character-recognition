@@ -1,6 +1,6 @@
-# 🤟 Indian Sign Language (ISL) Gesture Recognition & English Translation System
+# 🤟 Indian Sign Language (ISL) Gesture Recognition & English Translation System PART-1
 
-An AI-powered system that recognizes Indian Sign Language gestures (A–Z and 0–9) in real time using computer vision and machine learning, with the goal of translating signs into English text.
+An AI-powered system that recognizes Indian Sign Language character gestures (A–Z and 0–9) in real time using computer vision and machine learning, with the goal of translating signs into English text.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
 ![MediaPipe](https://img.shields.io/badge/MediaPipe-0.10+-green.svg)
@@ -10,12 +10,7 @@ An AI-powered system that recognizes Indian Sign Language gestures (A–Z and 0�
 
 ## 📌 Overview
 
-This project is part of a larger goal to build a **real-time Indian Sign Language (ISL) to English translation system**. The current module focuses on **static gestures** for:
-
-- **Alphabets:** A–Z
-- **Digits:** 0–9
-
-The system uses **MediaPipe** for hand landmark detection and a **Random Forest classifier** for gesture recognition. It supports both **single-hand** and **two-hand** gestures, correctly distinguishing between **left** and **right** hands.
+This project is part of a larger goal to build a **real-time Indian Sign Language (ISL) to English translation system**. The current module focuses on **static gestures** (Alphabets and Digits). The system uses **MediaPipe** for hand landmark detection and a **Random Forest classifier** for gesture recognition. It supports both **single-hand** and **two-hand** gestures, correctly distinguishing between **left** and **right** hands. The dataset used here is an image dataset consisting of .jpg files.
 
 ---
 
@@ -36,10 +31,11 @@ The system uses **MediaPipe** for hand landmark detection and a **Random Forest 
 ## 🏗️ Project Structure
 
 ```
-isl-gesture-recognition/
+isl-character-recognition/
 │
 ├── src/
 │   ├── config.py                  # Central configuration (paths, constants)
+|   ├── preprocess_utils.py        # General functions 
 │   ├── extract_landmarks.py       # Extract landmarks from dataset images
 │   ├── landmarks_preprocess.py    # Preprocess + augment + split data
 │   ├── train_model.py             # Train Random Forest with tuning & CV
@@ -103,8 +99,8 @@ Each image is converted into a **128-dimensional feature vector**:
 ### **1. Clone the Repository**
 
 ```bash
-git clone https://github.com/KhevanaVasani28/isl-gesture-recognition.git
-cd isl-gesture-recognition
+git clone https://github.com/KhevanaVasani28/isl-character-recognition.git
+cd isl-character-recognition
 ```
 
 ### **2. Create a Virtual Environment (Recommended)**
@@ -144,26 +140,24 @@ datasets/static_gestures/
 ### **5. Run the Pipeline (in order)**
 
 ```bash
-# Step 1: Extract landmarks from images
+# Step 1: Run the general configurations (path, constants)
+python src/config.py
+
+# Step 2: Run the general function utilities
+python src/preprocess_utils.py
+
+# Step 3: Extract landmarks from images
 python src/extract_landmarks.py
 
-# Step 2: Preprocess, augment, and split data
+# Step 4: Preprocess, augment, and split data
 python src/landmarks_preprocess.py
 
-# Step 3: Train the Random Forest model
+# Step 5: Train the Random Forest model
 python src/train_model.py
 
-# Step 4: (Optional) Analyze the trained model
-python src/analyze_model.py
-
-# Step 5: Run real-time prediction
+# Step 6: Run real-time prediction
 python src/realtime_prediction.py
 ```
-
-**Controls during real-time prediction:**
-- `Q` → Quit
-- `R` → Reset prediction smoothing
-
 ---
 
 ## 🧠 Model Details
