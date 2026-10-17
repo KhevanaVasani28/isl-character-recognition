@@ -12,6 +12,7 @@ from tqdm import tqdm
 from pathlib import Path
 
 from config import *
+from preprocess_utils import process_hands_correctly, extract_hand_features
 
 # %% ==========================================================
 # STEP 2 : Initialize MediaPipe Hands
@@ -73,57 +74,7 @@ print("Total Columns :", len(header))
 # %% ==========================================================
 # STEP 5 : CORRECTED - Function to Process Hands with Proper Ordering
 # ==========================================================
-
-def process_hands_correctly(multi_hand_landmarks, multi_handedness):
-    """
-    Process hands with proper left/right ordering.
-    Returns: (left_hand_landmarks, right_hand_landmarks)
-    """
-    left_hand = None
-    right_hand = None
-    
-    if multi_hand_landmarks is None:
-        return left_hand, right_hand
-    
-    # Identify which hand is which
-    for idx, hand_landmarks in enumerate(multi_hand_landmarks):
-        handedness = multi_handedness[idx].classification[0].label
-        if handedness == 'Left':
-            left_hand = hand_landmarks
-        else:  # 'Right'
-            right_hand = hand_landmarks
-    
-    return left_hand, right_hand
-
-def extract_hand_features(hand_landmarks, hand_type):
-    """
-    Extract features for a single hand.
-    hand_type: 0 for left, 1 for right
-    Returns: list of features [hand_type, x1, y1, z1, x2, y2, z2, ...]
-    """
-    if hand_landmarks is None:
-        # Return zeros for all landmarks, but keep hand_type to indicate which hand it is
-        features = [hand_type]  # 0 for left, 1 for right
-        features.extend([0.0] * 63)  # 21 landmarks * 3 coordinates
-        return features
-    
-    features = [hand_type]  # 0 for left, 1 for right
-    
-    # Wrist is landmark 0
-    wrist = hand_landmarks.landmark[0]
-    wrist_x = wrist.x
-    wrist_y = wrist.y
-    wrist_z = wrist.z
-    
-    # Normalize all landmarks relative to wrist
-    for landmark in hand_landmarks.landmark:
-        features.extend([
-            landmark.x - wrist_x,
-            landmark.y - wrist_y,
-            landmark.z - wrist_z
-        ])
-    
-    return features
+# in preprocess_utils.py
 
 # %% ==========================================================
 # STEP 6 : Start Processing Dataset
@@ -287,7 +238,6 @@ print(df["label"].value_counts().sort_index())
 # ==========================================================
 
 hands.close()
-
 # print("Finished Successfully.")
 
 
