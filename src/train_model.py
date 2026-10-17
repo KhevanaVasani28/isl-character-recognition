@@ -68,7 +68,7 @@ else:
 # Perform cross-validation
 cv = StratifiedKFold(n_splits=CV_FOLDS, shuffle=True, random_state=42)
 cv_scores = cross_val_score(
-    rf_cv, X_train, y_train,
+    rf_cv, X_cv, y_cv,
     cv=cv,
     scoring=CV_SCORING,
     n_jobs=1
