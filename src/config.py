@@ -19,7 +19,7 @@ RESULT_FOLDER = BASE_DIR / "results"
 LANDMARK_CSV = CSV_FOLDER / "landmarks_extracted.csv"
 
 # Image Size
-IMAGE_SIZE = (224, 224)
+TARGET_SIZE = (224, 224)
 
 # MediaPipe Settings
 MAX_NUM_HANDS = 2
