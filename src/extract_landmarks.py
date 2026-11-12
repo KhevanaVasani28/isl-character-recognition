@@ -121,7 +121,7 @@ for gesture in tqdm(gesture_classes):
             # Resize Image
             # ---------------------------------------------------
 
-            image = cv2.resize(image, IMAGE_SIZE)
+            image = cv2.resize(image, TARGET_SIZE)
 
             # ---------------------------------------------------
             # Convert BGR → RGB
